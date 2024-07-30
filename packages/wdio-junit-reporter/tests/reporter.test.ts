@@ -115,6 +115,34 @@ describe('wdio-junit-reporter', () => {
         expect(reporter['_getStandardOutput'](teststats)).toContain('RESULT: {"value":"foobar"}')
     })
 
+    it('stdout excluded', () => {
+        const teststats: TestStats = {
+            output: [{
+                cid: '123',
+                type: 'command',
+                method: 'POST',
+                sessionId: 'foobar',
+                endpoint: '/sessionId/click',
+                body: { elementId: 'foobar' },
+                command: 'getText',
+                params: {},
+                result: { value: 'some text' }
+            }, {
+                cid: '123',
+                method: 'POST',
+                sessionId: 'foobar',
+                endpoint: '/sessionId/click',
+                command: 'getText',
+                params: {},
+                result: { value: 'some text' },
+                type: 'result',
+                body: { value: 'foobar' }
+            }]
+        } as any as TestStats
+        reporter = new WDIOJunitReporter({ excludeStdOut: true })
+        expect(reporter['_getStandardOutput'](teststats)).toBe('')
+    })
+
     it('test is marked as skipped when is retried', () => {
         const testStats = new TestStats({
             type: 'test:start',

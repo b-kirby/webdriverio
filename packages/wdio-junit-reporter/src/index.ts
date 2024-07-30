@@ -283,21 +283,23 @@ class JunitReporter extends WDIOReporter {
 
     private _getStandardOutput (test: TestStats) {
         const standardOutput: string[] = []
-        test.output.forEach((data) => {
-            switch (data.type) {
-            case 'command':
-                standardOutput.push(
-                    data.method
-                        ? `COMMAND: ${data.method.toUpperCase()} ` +
-                          `${data.endpoint.replace(':sessionId', data.sessionId)} - ${this._format(data.body)}`
-                        : `COMMAND: ${data.command} - ${this._format(data.params)}`
-                )
-                break
-            case 'result':
-                standardOutput.push(`RESULT: ${this._format(data.body)}`)
-                break
-            }
-        })
+        if (!this.options.excludeStdOut) {
+            test.output.forEach((data) => {
+                switch (data.type) {
+                case 'command':
+                    standardOutput.push(
+                        data.method
+                            ? `COMMAND: ${data.method.toUpperCase()} ` +
+                                `${data.endpoint.replace(':sessionId', data.sessionId)} - ${this._format(data.body)}`
+                            : `COMMAND: ${data.command} - ${this._format(data.params)}`
+                    )
+                    break
+                case 'result':
+                    standardOutput.push(`RESULT: ${this._format(data.body)}`)
+                    break
+                }
+            })
+        }
         return standardOutput.length ? standardOutput.join('\n') : ''
     }
 

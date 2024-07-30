@@ -113,4 +113,10 @@ export interface JUnitReporterOptions extends Reporters.Options {
      * ```
      */
     errorOptions?: Record<string, string>
+    /**
+     * If true, the reporter will not print out the stdout of the test.
+     *
+     * @default false
+     */
+    excludeStdOut?: boolean
 }
